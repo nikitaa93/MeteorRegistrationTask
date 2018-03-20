@@ -18,28 +18,35 @@ export class Login extends Component {
         
         event.preventDefault();
         const that=this;
+        let errorMsg;
         let email = this.email.state.value;
         let password = this.password.state.value;
         this.setState({message : ''})
-       
-        if( this.email.state.valid && this.password.state.valid){
-            
-            Meteor.call('user_db1.find1',email,password,(err,resp)=>{
-                //console.log( err , '!!' ,resp);
-                if(!resp){
-                    this.setState({message : 'Incorrect email/password'})
-                    
-                }
-                else {
-                    this.setState({message : 'Logged in'});
-                    console.log('check');
-                    that.props.history.push('/App');
-                }
-        })
-        }    
-        else {
-            this.setState({message : 'Invalid Credentials'})
+        if(!email || !password){
+            errorMsg = 'Email/Password cannot be empty'
+            this.setState({message : errorMsg});
         }
+        else{       
+            if( this.email.state.valid && this.password.state.valid){
+            
+                Meteor.call('user_db1.find1',email,password,(err,resp)=>{
+                //console.log( err , '!!' ,resp);
+                    if(!resp){
+                        this.setState({message : 'Incorrect email/password'})
+                    
+                    }
+                    else {
+                        this.setState({message : 'Logged in'});
+                        console.log('check');
+                        that.props.history.push('/App');
+                    }
+                });
+            }    
+            else {
+                this.setState({message : 'Invalid Credentials'})
+            }
+        }
+           
     }
 
 

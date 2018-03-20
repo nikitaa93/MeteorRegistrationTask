@@ -5,7 +5,7 @@ import TextElement from './TextElement';
 import { withTracker } from 'meteor/react-meteor-data';
 import { history } from "react-router-dom";
 import { Users } from '../api/user';
-
+let errorMsg='';
 export class Registration extends Component {
     constructor(props) {
       super(props);
@@ -19,6 +19,7 @@ export class Registration extends Component {
 
     handleSubmit = (event) => {
         const that = this;
+        //let errorMsg;
         event.preventDefault();
         email = this.email.state.value;
         password = this.password.state.value;
@@ -27,15 +28,22 @@ export class Registration extends Component {
         if( this.name.state.valid && this.email.state.valid && this.password.state.valid && this.confirmpassword.state.valid){
             Meteor.call('user_db1.insert1',name,email,password,function(error,resp){
                 if(resp == 11000){
-                    
-                   that.setState({message : 'User Exists'});
+                   'User Exists';
                 }
-                else if(resp)
-                    that.setState({message : 'Registration Complete!'});    
+                else if(resp){
+                    errorMsg =  'Registration Complete!'; 
+                }   
             });
         }
-        else 
-            this.setState({message : 'Invalid details'}); 
+        else {
+            if(this.confirmpassword.state.valid){
+                errorMsg = 'Password doesnt match'
+                //errorMsg1 =  'Password doesnt match'
+                this.confirmpassword.state.errorMessage = 'Password doesnt match'
+            }else 
+            errorMsg =  'Invalid details';
+        }
+        this.setState({message : errorMsg}); 
        
     }
      handleLoginSubmit = (event) =>{
@@ -58,7 +66,7 @@ export class Registration extends Component {
                     <br/>
                     <TextElement type= 'password' ref={(input) => this.password = input }labelName='Password :' name='password' />
                     <br/>
-                    <TextElement type= 'password'ref={(input) => this.confirmpassword = input } labelName='Confirm Password :' name='confirmPassword'/>
+                    <TextElement type= 'password'ref={(input) => this.confirmpassword = input } labelName='Confirm Password :' name='confirmPassword' error1={errorMsg}/>
                     <br/>
                     <button type='button' value='Submit' onClick={this.handleSubmit.bind(this)} >Register </button>
                     <br/>

@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import propTypes from 'prop-types';
 import   ErrorElement from './Error';
-let pass ='';
+let pass ='',confirmPassword='';
 export default class TextElement extends Component {
     constructor(props) {
         super(props);
@@ -38,16 +38,19 @@ export default class TextElement extends Component {
         else if(type == 'name') {
             valid = this.validateName(value);
         }else if(type== 'password' && name == 'confirmPassword'){    
+            confirmPassword = value;
+            console.log('pass',pass,'confirm',confirmPassword);
             valid = this.validateConfirmPassword(pass,value);
+            console.log('xpass',valid );
         }
-        else if( !type || type == 'text' || type == 'password'  ) {
-            if(type == 'password' && name == 'password'){
-                pass = value;
-                //console.log('in handlechange pass',pass )
-            }
-            valid = true;
+        else if(type == 'password' && name == 'password'){
+            pass = value;
+            valid =true;
+            console.log('pass',pass,'confirm',confirmPassword);
+            //valid = this.validateConfirmPassword(pass,confirmPassword);
+            //console.log('in handlechange pass',pass )
+            console.log('pass',valid );
         }
-        
         this.validation(value, valid);
         
     }
@@ -69,7 +72,7 @@ export default class TextElement extends Component {
             });
   
         } else if (!valid) {
-            if(name == 'password' || name == 'confirmPassword'){
+            if (name == 'confirmPassword'){
                 this.setState({
                     errorMessage  : 'Passwords doesnt match',
                     valid         : false,
@@ -82,16 +85,15 @@ export default class TextElement extends Component {
                     errorVisible  : true 
                 });
             }
-        }else{
+        }else if(valid){
             //console.log('- input valid --');
             this.setState({
                 errorMessage : ' ',
-                errorVisible: false,
-                value : value,
+                errorVisible : false,
+                value        : value,
                 valid,
             });
-        
-        
+
         }
         
         
@@ -121,7 +123,7 @@ export default class TextElement extends Component {
     }
     render() {
         const { props, state }                      = this;
-        const { name}                               = props;
+        const { name,error1}                               = props;
         let   { type,labelName }                    = props;
         const { errorVisible, errorMessage }        = state;
         return (      
@@ -139,6 +141,7 @@ export default class TextElement extends Component {
                     visible      = { errorVisible } 
                     errorMessage = { errorMessage }
                 />
+                <label className='error'>{this.props.error1}</label>
             </center>
         );
     }
