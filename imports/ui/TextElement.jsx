@@ -36,17 +36,18 @@ export default class TextElement extends Component {
             valid = this.validateEmail(value);
         }
         else if(type == 'name') {
+            console.log('nnnn',)
             valid = this.validateName(value);
         }else if(type== 'password' && name == 'confirmPassword'){    
             confirmPassword = value;
             console.log('pass',pass,'confirm',confirmPassword);
             valid = this.validateConfirmPassword(pass,value);
-            console.log('xpass',valid );
+            
         }
         else if(type == 'password' && name == 'password'){
             pass = value;
             valid =true;
-            console.log('pass',pass,'confirm',confirmPassword);
+            
             //valid = this.validateConfirmPassword(pass,confirmPassword);
             //console.log('in handlechange pass',pass )
             console.log('pass',valid );
@@ -108,7 +109,7 @@ export default class TextElement extends Component {
   
     validateName(value) {
         let re=/^[a-zA-Z][a-zA-Z. _]+$/;
-        //console.log('test name : ',re.test(value));
+        console.log('test name : ',re.test(value));
         return re.test(value);
     }
   

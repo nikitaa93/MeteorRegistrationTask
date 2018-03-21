@@ -22,6 +22,7 @@ export class Login extends Component {
         let email = this.email.state.value;
         let password = this.password.state.value;
         this.setState({message : ''})
+        
         if(!email || !password){
             errorMsg = 'Email/Password cannot be empty'
             this.setState({message : errorMsg});

@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 Future = Npm.require('fibers/future');
-import { Users } from '../api/user';
+import { Users } from '../api/user.js';
 import bcrypt from 'bcrypt';
 
 if (Meteor.isServer) {
@@ -28,7 +28,7 @@ Meteor.methods({
             }).catch(function(error){
                 //console.log('%%5',error);
                 //console.log(SimpleSchema.message)
-                myFuture.return(error.code);  
+                myFuture.throw(error);  
             });
             
         return myFuture.wait();
