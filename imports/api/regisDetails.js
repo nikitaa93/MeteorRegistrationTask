@@ -36,25 +36,28 @@ Meteor.methods({
   
     'user_db1.find1'(email,password){
         const myFuture =  new Future();
-        //console.log(email);
-        let x = Users.findOne({
-            email: email
-        });
-        let hash = x.password;
-        let setflag = 0;
-        //console.log('hash' ,hash);
-        //console.log('pass :',password)
-        //console.log('bcrypt',bcrypt.compare(password, hash))
-        bcrypt.compare(password, hash)
-            .then(function (res) {
-                setflag = 1;
-                //console.log('res',res)
-                myFuture.return(res);
-            }).catch(function(error){
-                //console.log('error',error);
-                myFuture.return(error);
-            });
+        console.log(email);
+        
+        // let x = Users.find({
+        //     email: email
+        // }).fetch();
+        // console.log('x',x)
+        if(Users.find({email: email}).count() >0){
+        
+            let hash = Users.findOne({email:email}).password;
+            let setflag = 0;
+            //console.log('hash' ,hash);
+            console.log('pass :',password)
+            //console.log('bcrypt',bcrypt.compare(password, hash))
+            if(bcrypt.compareSync(password, hash)){
+                myFuture.return(true);}
+            else {
+                myFuture.throw('Incorrect Password');
+            }
             
+        }else{
+            myFuture.throw('Incorrect Email');
+        }    
         return myFuture.wait();
     
     },

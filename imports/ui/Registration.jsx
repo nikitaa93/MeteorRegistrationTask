@@ -34,7 +34,7 @@ export class Registration extends Component {
         
             if( this.name.state.valid && this.email.state.valid && this.password.state.valid && this.confirmPassword.state.valid){
                 Meteor.call('user_db1.insert1',name,email,password,function(error,resp){
-                    console.log('resp ',resp,error)
+                    console.log('resp ',resp,error``)
                     if(error){
                         errorMsg = 'User Exists';
                         that.setState({message : errorMsg}); 
